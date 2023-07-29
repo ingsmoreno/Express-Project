@@ -1,6 +1,7 @@
-#ENV CONFIGURATION
-.env*
-.env
+# dotenv environment variables file
+config.env
+.env.*
+!.env.example
 
 # Dependency directories
 node_modules/
