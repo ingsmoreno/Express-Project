@@ -3,12 +3,12 @@ const {getAllTours, postTour, getTourById, patchTour,deleteTour, checkId, checkB
 
 const router = express.Router();
 
-router.param('id', checkId);
+// router.param('id', checkId);
 
 router
     .route('/')
     .get(getAllTours)
-    .post(checkBody, postTour);
+    .post(postTour);
 
 router
     .route('/:id')
