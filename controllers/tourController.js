@@ -1,26 +1,9 @@
 const fs = require('fs');
 const readFile = require('../readfile');
 const Tour = require('./../models/tourModel');
+const APIFeatures = require('../utils/apiFeatures')
 
 const tours = readFile('tours-simple.json');
-
-// exports.checkId = (req, res, next, val) => {
-//     const id = val * 1;
-//     const tour = tours.filter(element => element !== null ).find(element => element.id === id);
-
-//     if(!tour) return res.status(404).json({message: '404 NOT FOUND'});
-//     if(tour["deletedAt"])  return res.status(404).json({message: '404 NOT FOUND'});
-//     next();
-// }
-
-// exports.checkBody = (req, res, next) => {
-
-//     if(!req.body['price'] && !req.body['name']) return res.status(404).json({message: 'price and name values are empty'});
-//     if(!req.body['price']) return res.status(404).json({message: 'price value is empty'});
-//     if(!req.body['name']) return res.status(404).json({message: 'name value is empty'});
-//     next();
-// }
-
 
 exports.aliasTopTours = (req, res, next) => {
     req.query.limit = '5';
@@ -28,7 +11,6 @@ exports.aliasTopTours = (req, res, next) => {
     req.query.fields = 'name,price,ratingAverage,summary,difficulty';
     next();
 }
-
 
 exports.postTour = async (req, res) => {
 
@@ -50,8 +32,6 @@ exports.postTour = async (req, res) => {
 
         
 } 
-
-
 
 exports.getTourById = async (req, res) => {
 
@@ -76,47 +56,13 @@ exports.getTourById = async (req, res) => {
 exports.getAllTours = async (req, res) => {
 
     try{
-
-        const queryObj = {...req.query};
-        const excludedFielfs = ['page', 'sort', 'limit', 'fields'];
-
-        excludedFielfs.forEach(el => delete queryObj[el])
-
-        //ADVANCED FILTERING
-        const queryStr = JSON.stringify(queryObj).replace(/\b(gte|gt|lt|lte)\b/g, match => `$${match}`);
-
-        let query = Tour.find( JSON.parse(queryStr) );
-        
-        //SORTING
-        if(req.query.sort){
-            const sortBy = req.query.sort.split(',').join(' ')
-            query = query.sort(sortBy);
-        }
-
-        // Field Limiting
-
-        if(req.query.fields){
-
-            const fields = req.query.fields.split(',').join(' ')
-            console.log(fields)
-            query = query.select(fields)
-
-        } else {
-            query = query.select('-__v')
-        }
-
-        // Pagination 
-        const page = req.query.page * 1 || 1;
-        const limit = req.query.limit * 1 || 100
-        const skip = (page - 1) * limit;
-        query = query.skip(skip).limit(limit)
-
-        if(req.query.page){
-            const countPage = await Tour.countDocuments();
-            if(skip >= countPage) throw new Error('This page does not exist')
-        }
-        
-        const tours = await query;
+        const feature = new APIFeatures(Tour.find(), req.query)
+            .filter()
+            .sort()
+            .limit()
+            .paginate()
+    
+        const tours = await feature.queryMongo;
 
         res.status(200).json({
             status: 'success',
