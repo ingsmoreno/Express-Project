@@ -11,6 +11,54 @@ exports.aliasTopTours = (req, res, next) => {
     req.query.fields = 'name,price,ratingAverage,summary,difficulty';
     next();
 }
+//https://www.mongodb.com/docs/manual/reference/operator/aggregation-pipeline/
+exports.getTourStats = async (req,res) => {
+    try{
+        const stats = await Tour.aggregate([
+            {
+                $match: { 
+                    ratingAverage: {$gte: 4.5}
+                }
+            },
+            {
+                $group: {
+                    _id: {$toUpper: '$difficulty'},
+                    numTours: {$sum: '1'},
+                    numRatings: {$sum: '$ratingQuantity'},
+                    avgRating: {$avg: '$ratingAverage'},
+                    avgPrice: {$avg: '$price'},
+                    minPrice: {$min: '$price'},
+                    maxPrice: {$max: '$price'},
+                }
+            },
+            {
+                $sort: {
+                    avgPrice: 1
+                }
+            },
+            {
+                $match: {
+                    _id: {$ne: 'EASY'}
+                }
+            }
+        ])
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                stats
+            },
+        })
+
+    }catch(err){
+        console.log(err)
+        res.status(400).json({
+            status: "fail",
+            message: err
+        })
+
+    }
+}
 
 exports.postTour = async (req, res) => {
 
