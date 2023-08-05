@@ -52,6 +52,18 @@ const toursSchema = new mongoose.Schema({
         select: false
     },
     startDates: [Date]
+}, 
+{
+    toJSON: { virtuals: true },
+    toObject: {virtuals: true},
+}
+)
+
+
+//This cannot be searched into the properties for the schema
+//this is only for business logic
+toursSchema.virtual('durationWeeks').get(function(){
+    return this.duration / 7;
 })
 
 const Tour = mongoose.model('Tour', toursSchema);
