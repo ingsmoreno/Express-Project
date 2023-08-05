@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
+
 
 const toursSchema = new mongoose.Schema({
     name: {
@@ -23,6 +25,7 @@ const toursSchema = new mongoose.Schema({
         type: Number, 
         required: [true, 'A tour must have a price']
     },
+    slug: String,
     priceDiscount: Number,
     summary: {
         type: String, 
@@ -64,6 +67,20 @@ const toursSchema = new mongoose.Schema({
 //this is only for business logic
 toursSchema.virtual('durationWeeks').get(function(){
     return this.duration / 7;
+}); 
+
+
+
+//DOCUMENT MIDDLEWARE
+//middleware hook / .save, .create // POST
+toursSchema.pre('save', function(next){
+    this.slug = slugify(this.name, {lower: true});
+    next();
+})
+
+toursSchema.post('save', function(doc, next){
+    console.log(doc);
+    next();
 })
 
 const Tour = mongoose.model('Tour', toursSchema);
