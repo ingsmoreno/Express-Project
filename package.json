@@ -16,7 +16,8 @@
     "mongoose": "^5.13.20",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.22",
-    "slug": "^8.2.3"
+    "slug": "^8.2.3",
+    "validator": "^13.11.0"
   },
   "engines": {
     "node": ">=10.0.0"
