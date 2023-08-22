@@ -1,8 +1,10 @@
 const express = require('express');
 const dotenv = require('dotenv')
 const morgan = require('morgan');
-const tourRouter = require('./routes/tourRoutes')
-const userRouter = require('./routes/userRoutes')
+const tourRouter = require('./routes/tourRoutes');
+const userRouter = require('./routes/userRoutes');
+const AppError = require('./utils/appError');
+const globalHandlerError = require('./controllers/errorController')
 
 
 
@@ -26,22 +28,10 @@ app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter); 
 
 app.all('*', (req, res, next) => {
-
-    const err = new Error(`This url ${req.originalUrl} does not exist`);
-    err.statusCode = 404;
-    err.status = 'fail'
-    next(err);
+    next(new AppError(`This url ${req.originalUrl} does not exist`, 404));
 })
 
-app.use((err, req, res, next) => {
-    err.statusCode = err.statusCode || 500;
-    err.status = err.status || 'error';
-
-    res.status(err.statusCode).json({
-        status: err.status,
-        message: err.message
-    })
-})
+app.use(globalHandlerError);
 
 module.exports = app;
 
