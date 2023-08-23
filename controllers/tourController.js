@@ -3,6 +3,7 @@ const readFile = require('../readfile');
 const Tour = require('./../models/tourModel');
 const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 
 const tours = readFile('tours-simple.json');
 
@@ -119,18 +120,22 @@ exports.getMonthlyPlan = async ( req, res) => {
 
 exports.postTour = catchAsync(async (req, res, next) => {
 
-        const newTour = await Tour.create(req.body)
+        const tour = await Tour.create(req.body);
+
         res.status(201).json({
             status: 'success',
             data: {
-            tour: newTour
+            tour
             }
         })
 });
 
 exports.getTourById = catchAsync (async (req, res, next) => {
 
-        const tour = await Tour.findById(req.params.id)
+        const tour = await Tour.findById(req.params.id);
+
+        if(!tour) return next(new AppError(`The id ${req.params.id} tour does not exist`, 404));
+
         res.status(200).json({
             status: 'success',
             data: {
@@ -164,6 +169,8 @@ exports.patchTour = catchAsync(async (req, res, next) => {
             new: true,
             runValidators: true
         });
+
+        if(!tour) return next(new AppError(`The id ${req.params.id} tour does not exist`, 404));
     
         res.status(200).json({
             status: 'successfully updated',
@@ -176,12 +183,15 @@ exports.patchTour = catchAsync(async (req, res, next) => {
 })
 
 exports.deleteTour = catchAsync(async (req, res, next) => {
-        const deleteTour = await Tour.findByIdAndDelete(req.params.id);
+        const tour = await Tour.findByIdAndDelete(req.params.id);
+        
+        if(!tour) return next(new AppError(`The id ${req.params.id} tour does not exist`, 404));
+        
         if(deleteTour){
             res.status(204).json({
                 status: 'success',
                 data: {
-                    tour: deleteTour,
+                    tour
                 }
             })
         }else {
