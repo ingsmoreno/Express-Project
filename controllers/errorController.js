@@ -8,7 +8,7 @@ const handleMesageFormatError = error =>  {
 }
 
 const handleDuplicateError = error => {
-    const message = `Duplicate field "${error.keyValue.name}", please use another value`;
+    const message = `Duplicate field "${JSON.stringify(error.keyValue)}", please use another value`;
     
     return new AppError(message, 400);
 }
@@ -39,6 +39,7 @@ const sendErrorProd = (err, res) => {
         })
 
     } else {
+        console.log(err)
     //programming errors (mongo or third party libraries error)
         res.status(500).json({
             status: 'error',
