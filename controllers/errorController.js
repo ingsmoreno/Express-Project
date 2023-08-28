@@ -7,6 +7,12 @@ const handleMesageFormatError = error =>  {
 
 }
 
+const handleDuplicateError = error => {
+    const message = `Duplicate field "${error.keyValue.name}", please use another value`;
+    
+    return new AppError(message, 400);
+}
+
 const sendErrorDev = (err, res) => {
     return res.status(err.statusCode).json({
         status: err.status,
@@ -43,7 +49,11 @@ module.exports = (err, req, res, next) => {
         
     }else if(process.env.NODE_ENV === 'production'){
         let error = { ...err };
-        if(error.messageFormat === undefined) error = handleMesageFormatError(error);
+        if(error.code === 11000) {
+            error = handleDuplicateError(error)
+        } else if(error.messageFormat === undefined){
+            error = handleMesageFormatError(error)
+        };
         sendErrorProd(error, res);
     }
 
