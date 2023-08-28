@@ -13,6 +13,13 @@ const handleDuplicateError = error => {
     return new AppError(message, 400);
 }
 
+const handleValidationError = error => {
+   const errors = Object.values(error.errors).map(value => value.properties.message)
+    const message = `Invalid input data ${errors.join('. ')}`;
+
+    return new AppError(message, 400);
+}
+
 const sendErrorDev = (err, res) => {
     return res.status(err.statusCode).json({
         status: err.status,
@@ -51,9 +58,11 @@ module.exports = (err, req, res, next) => {
         let error = { ...err };
         if(error.code === 11000) {
             error = handleDuplicateError(error)
-        } else if(error.messageFormat === undefined){
+        } else if(error.hasOwnProperty('messageFormat') && error.messageFormat === undefined){
             error = handleMesageFormatError(error)
-        };
+        } else if(error._message === 'Validation failed') {
+           error = handleValidationError(error);
+        }
         sendErrorProd(error, res);
     }
 
