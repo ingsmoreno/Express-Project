@@ -1,6 +1,6 @@
 const AppError = require('./../utils/appError');
 
-const handleNameCastError = error =>  {
+const handleMesageFormatError = error =>  {
     const message = `Invalid ${error.path}: ${error.value}`
 
     return new AppError(message, 400);
@@ -43,7 +43,7 @@ module.exports = (err, req, res, next) => {
         
     }else if(process.env.NODE_ENV === 'production'){
         let error = { ...err };
-        if(error.messageFormat === undefined) error = handleNameCastError(error);
+        if(error.messageFormat === undefined) error = handleMesageFormatError(error);
         sendErrorProd(error, res);
     }
 
