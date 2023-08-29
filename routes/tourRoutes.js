@@ -1,6 +1,6 @@
 const express = require('express');
-const { getAllTours, postTour, getTourById, patchTour,deleteTour, aliasTopTours, getTourStats, getMonthlyPlan } = require('./../controllers/tourController')
-const { protect } = require('./../controllers/authController')
+const { getAllTours, postTour, getTourById, patchTour, deleteTour, aliasTopTours, getTourStats, getMonthlyPlan } = require('./../controllers/tourController')
+const { protect, restrictTo } = require('./../controllers/authController')
 const router = express.Router();
 
 // router.param('id', checkId);
@@ -26,6 +26,10 @@ router
     .route('/:id')
     .get(getTourById)
     .patch(patchTour)
-    .delete(deleteTour);
+    .delete(
+        protect, 
+        restrictTo('admin', 'lead-guide'), 
+        deleteTour
+    );
 
 module.exports = router;
