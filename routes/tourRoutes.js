@@ -1,6 +1,6 @@
 const express = require('express');
 const { getAllTours, postTour, getTourById, patchTour,deleteTour, aliasTopTours, getTourStats, getMonthlyPlan } = require('./../controllers/tourController')
-
+const { protect } = require('./../controllers/authController')
 const router = express.Router();
 
 // router.param('id', checkId);
@@ -19,8 +19,8 @@ router
 
 router
     .route('/')
-    .get(getAllTours)
-    .post(postTour);
+    .get(protect, getAllTours)
+    .post(protect, postTour);
 
 router
     .route('/:id')
