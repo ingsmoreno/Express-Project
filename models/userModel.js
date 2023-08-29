@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
-const userShema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'The User must have a name'],
@@ -20,6 +20,7 @@ const userShema = new mongoose.Schema({
         type: String,
         minLength: [8, 'The password must have more than 8 characters'],
         required: [true, 'The User must have a password'],
+        select: false
     }, 
     passwordConfirm: {
         type: String,
@@ -29,16 +30,21 @@ const userShema = new mongoose.Schema({
                 return value === this.password;
             }, 
             message: "The passwordConfirm must be equal to password",
-        }
+        },
+        select: false
     }, 
 });
 
-userShema.pre('save', async function(next){
+userSchema.pre('save', async function(next){
     this.password = await bcrypt.hash(this.password, 12);
     this.passwordConfirm = undefined;
     next()
 })
 
-const User = mongoose.model('User', userShema);
+userSchema.methods.correctPassword = function (candidatePassword, userPassword) {
+    return bcrypt.compare(candidatePassword, userPassword);
+}
+
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;
