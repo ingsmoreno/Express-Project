@@ -3,6 +3,7 @@ const dotenv = require('dotenv')
 const morgan = require('morgan');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
+const authRouter = require('./routes/authRoutes');
 const AppError = require('./utils/appError');
 const globalHandlerError = require('./controllers/errorController')
 
@@ -26,7 +27,8 @@ app.use((req, res, next) => {
 })
 
 app.use('/api/v1/tours', tourRouter);
-app.use('/api/v1/users', userRouter); 
+app.use('/api/v1/users', userRouter);
+app.use('/api/v1/authUsers', authRouter);
 
 app.all('*', (req, res, next) => {
     next(new AppError(`This url ${req.originalUrl} does not exist`, 404));
