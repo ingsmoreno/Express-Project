@@ -33,6 +33,7 @@ const userSchema = new mongoose.Schema({
         },
         select: false
     }, 
+    passwordChangedAt: Date,
 });
 
 userSchema.pre('save', async function(next){
@@ -43,6 +44,16 @@ userSchema.pre('save', async function(next){
 
 userSchema.methods.correctPassword = function (candidatePassword, userPassword) {
     return bcrypt.compare(candidatePassword, userPassword);
+}
+
+userSchema.methods.changedPasswordAfter = function(JWTTimeStamp){
+    if(this.passwordChangedAt){
+        const changedTimeStamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
+        return JWTTimeStamp < changedTimeStamp;
+    }
+
+    return false;
+   
 }
 
 const User = mongoose.model('User', userSchema);
