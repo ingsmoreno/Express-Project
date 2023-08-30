@@ -20,7 +20,7 @@ exports.singup = catchAsync(async (req, res) => {
         password: req.body.password,
         passwordConfirm: req.body.passwordConfirm,
         passwordChangedAt: req.body.passwordChangedAt,
-        role: req.body.role
+        role: req.body.role,
     }); 
 
     const token = signToken(newUser._id);
@@ -148,6 +148,29 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
     res.status(201).json({
         status: 'sucess',
+        token
+    })
+});
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+    // 1) Get user  from collectio
+    if(!req.body.oldPassword) return next(new AppError('Please provide the oldPassword', 400));
+    const user = await User.findOne({_id: req.user._id }).select('+password');
+
+    // 2) Check if post current password is correct
+    if(!(await user.correctPassword(req.body.oldPassword, user.password))) return next(new AppError('The old password is not correct', 401));
+
+    // 3) Update password
+    user.password = req.body.newPassword
+    user.passwordConfirm = req.body.passwordConfirm;
+    await user.save();
+
+    // 4) Log user in, send JWT
+    const token = signToken(user._id);
+
+    res.status(201).json({
+        status: 'sucess',
+        message: "Password changed successfully",
         token
     })
 })
