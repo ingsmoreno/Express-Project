@@ -7,7 +7,7 @@ router.route('/forgotPassword')
     .post(forgotPassword);
 
 router.route('/resetPassword/:token')
-    .post(resetPassword);
+    .patch(resetPassword);
 
 router.route('/signup')
     .post(singup);
