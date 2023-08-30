@@ -1,7 +1,13 @@
 const express = require('express');
-const { singup, login } = require('./../controllers/authController');
+const { singup, login, forgotPassword } = require('./../controllers/authController');
 
 const router = express.Router();
+
+router.route('/forgotPassword')
+    .post(forgotPassword);
+
+router.route('/resetPassword/:token')
+    .post(resetPassword);
 
 router.route('/signup')
     .post(singup);
