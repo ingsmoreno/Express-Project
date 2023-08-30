@@ -1,10 +1,13 @@
 const express = require('express');
-const { singup, login, forgotPassword, resetPassword, updatePassword, protect,  } = require('./../controllers/authController');
+const { singup, login, forgotPassword, resetPassword, updatePassword, protect, updateMe } = require('./../controllers/authController');
 
 const router = express.Router();
 
 router.route('/updatePassword')
     .patch(protect, updatePassword);
+
+router.route('/updateMe')
+    .patch(protect, updateMe);
 
 router.route('/forgotPassword')
     .post(forgotPassword);
