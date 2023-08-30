@@ -13,6 +13,15 @@ const signToken = (userId) => {
     })
 }
 
+const filterRoles = (obj, ...allowedFields) => {
+    const newObj = {};
+    Object.keys(obj).forEach(el => {
+        console.log(el, 'obj')
+        if(allowedFields.includes(el)) newObj[el] = obj[el];
+    })
+    return newObj;
+}
+
 exports.singup = catchAsync(async (req, res) => {
     const newUser = await User.create({
         name: req.body.name,
@@ -172,5 +181,26 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
         status: 'sucess',
         message: "Password changed successfully",
         token
+    })
+})
+
+exports.updateMe = catchAsync( async (req, res, next) => {
+    // 1) Create error if user post password data
+    if(req.body.password || req.body.passwordConfirm ) return next(new AppError('The password cannot be updated. Please update password in /updatePassword', 401));
+
+    // 2) Filter put wanted fields that are allowed to be updated
+    const filterFields = filterRoles(req.body, 'name', 'email');
+    const updateUser = await User.findByIdAndUpdate({_id: req.user._id}, filterFields, {
+        new: true,
+        runValidators: true
+    })
+
+    // 3) Update user document
+
+    res.status(201).json({
+        status: 'sucess',
+        data: {
+            updateUser
+        }
     })
 })
