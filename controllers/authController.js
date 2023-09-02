@@ -61,7 +61,7 @@ exports.singup = catchAsync(async (req, res) => {
         role: req.body.role,
     }); 
 
-  createSendToken(newUser, res, 201, 'success',  {data: newUser});
+  createSendToken(newUser, res, 201, 'success',  {user: newUser});
 
 })
 
