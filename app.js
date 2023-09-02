@@ -28,7 +28,7 @@ app.use((req, res, next) => {
 
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
-app.use('/api/v1/authUsers', authRouter);
+app.use('/api/v1/auth-users', authRouter);
 
 app.all('*', (req, res, next) => {
     next(new AppError(`This url ${req.originalUrl} does not exist`, 404));
