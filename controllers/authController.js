@@ -184,6 +184,16 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
     })
 })
 
+exports.deleteMe = catchAsync(async (req, res, next) => {
+    const user = await User.findByIdAndUpdate({_id: req.user._id}, {active: false});
+    
+    res.status(204).json({
+        status: 'sucess',
+        data: null
+    })
+
+})
+
 exports.updateMe = catchAsync( async (req, res, next) => {
     // 1) Create error if user post password data
     if(req.body.password || req.body.passwordConfirm ) return next(new AppError('The password cannot be updated. Please update password in /updatePassword', 401));
