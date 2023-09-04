@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const User = require('./userModel');
 const validator = require('validator'); //https://github.com/validatorjs/validator.js
 
 // BUILT IN VALIDATORS https://mongoosejs.com/docs/validation.html#built-in-validators
@@ -99,7 +100,8 @@ const toursSchema = new mongoose.Schema({
         address: String, 
         description: String, 
         day: String
-    }]
+    }], 
+    guides: Array
 }, 
 {
     toJSON: { virtuals: true },
@@ -123,6 +125,13 @@ toursSchema.pre('save', function(next){
     next();
 });
 
+toursSchema.pre('save', async function(next){
+    const guidePromises = this.guides.map(async id => await User.findById(id));
+    this.guides = await Promise.all(guidePromises);
+    next();
+});
+
+//QUERY MIDDLEWARE
 toursSchema.pre(/^find/, function(next){
     this.find({secretTour: {$ne: true}})
 
@@ -135,6 +144,8 @@ toursSchema.post(/^find/, function(doc, next){
     next();
 })
 
+
+//Aggregation middleware
 toursSchema.pre('aggregate', function(next){
     this.pipeline().unshift({$match: {secretTour: { $ne: true}}});
     next();
