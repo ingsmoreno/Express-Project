@@ -2,9 +2,6 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const readFile = require('../readfile');
 const Tours = require('../models/tourModel');
-
-const toursData = JSON.parse(readFile('tours-simple.json'));
-
 dotenv.config({path: './config.env'});
 
 const DB = process.env.DATABASE.replace(
@@ -22,7 +19,7 @@ mongoose.connect(DB, {
     if(err) throw Error("Connect error to MongoDB")}
     )
 
-
+const toursData = JSON.parse(readFile('tours.json'));
 
 const importData = async () => {
 
@@ -50,4 +47,5 @@ const deleteData = async () => {
     process.exit();
 }
 
+// command node ./dev-data/import-dev-data.js --import
 process.argv.includes('--import') ? importData() : deleteData();
