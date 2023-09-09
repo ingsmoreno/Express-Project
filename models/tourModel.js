@@ -101,7 +101,10 @@ const toursSchema = new mongoose.Schema({
         description: String, 
         day: String
     }], 
-    guides: Array
+    guides: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+        }]
 }, 
 {
     toJSON: { virtuals: true },
@@ -125,13 +128,19 @@ toursSchema.pre('save', function(next){
     next();
 });
 
-toursSchema.pre('save', async function(next){
-    const guidePromises = this.guides.map(async id => await User.findById(id));
-    this.guides = await Promise.all(guidePromises);
-    next();
-});
+// toursSchema.pre('save', async function(next){
+//     const guidePromises = this.guides.map(async id => await User.findById(id));
+//     this.guides = await Promise.all(guidePromises);
+//     next();
+// });
 
 //QUERY MIDDLEWARE
+toursSchema.pre(/^find/, function(next){
+    this.populate({path: 'guides', select: '-__v -passwordChangedAt' });
+    next();
+})
+
+
 toursSchema.pre(/^find/, function(next){
     this.find({secretTour: {$ne: true}})
 
