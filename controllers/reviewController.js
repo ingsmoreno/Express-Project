@@ -3,7 +3,9 @@ const AppError = require('./../utils/appError');
 const Reviews = require('./../models/reviewModel');
 
 exports.createReview = catchAsync( async (req, res, next) => {
-    const newReview = await Reviews.create({
+    if(!req.body.tour) req.body.tour = req.params.tourId;
+    if(!req.body.user) req.body.user = req.user.id;
+     const newReview = await Reviews.create({
         review: req.body.review,
         rating: req.body.rating,
         tour: req.body.tour,
