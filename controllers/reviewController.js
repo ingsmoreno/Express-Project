@@ -20,10 +20,6 @@ exports.createReview = catchAsync( async (req, res, next) => {
 exports.getAllReviews = catchAsync( async (req, res, next) => {
    const reviews = await Reviews.find();
 
-   if(!reviews) return (AppError(''))
-
-   console.log(reviews)
-
    res.status(200).json({
         status: 'success',
         data: reviews

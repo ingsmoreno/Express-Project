@@ -104,8 +104,8 @@ const toursSchema = new mongoose.Schema({
     guides: [{
         type: mongoose.Schema.ObjectId,
         ref: 'User'
-        }]
-}, 
+        }],
+    }, 
 {
     toJSON: { virtuals: true },
     toObject: {virtuals: true},
@@ -119,7 +119,12 @@ toursSchema.virtual('durationWeeks').get(function(){
     return this.duration / 7;
 }); 
 
-
+//REF virtual populate: https://mongoosejs.com/docs/tutorials/virtuals.html
+toursSchema.virtual('reviews', {
+    ref: 'Reviews',
+    foreignField: 'tour',
+    localField: '_id'
+}) 
 
 //DOCUMENT MIDDLEWARE
 //middleware hook / .save, .create // POST
