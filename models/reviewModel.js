@@ -14,16 +14,16 @@ const reviewSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }, 
-    tour: [{
+    tour: {
         type: mongoose.Types.ObjectId,
         ref: 'Tour',
         required: [true, 'Review must belong to a Tour']
-    }], 
-    user: [{
+    }, 
+    user: {
         type: mongoose.Types.ObjectId,
         ref: 'User',
         required: [true, 'Review must belong to a User']
-    }]
+    }
 }, 
 {
     toJSON: { virtuals: true },
@@ -33,15 +33,11 @@ const reviewSchema = new mongoose.Schema({
 )
 
 //REF: https://mongoosejs.com/docs/5.x/docs/populate.html#:~:text=Mongoose%20has%20a%20more%20powerful,from%20other%20collection(s).
-reviewSchema.pre(/find/, function(next){
+reviewSchema.pre(/^find/, function(next){
     this.populate({
         path: 'user',
         select: 'name'
-    }).populate({
-        path: 'tour', 
-        select: 'name' 
     })
-
     next();
 })
 
