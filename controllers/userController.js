@@ -1,5 +1,6 @@
 const User = require('./../models/userModel');
 const catchAsync = require("../utils/catchAsync");
+const { deleteOne } = require('./handlerFactory');
 
 exports.getAllUsers = catchAsync( async (req, res) => {
 
@@ -35,9 +36,4 @@ exports.updateUserById = (req, res) => {
     })
 } 
 
-exports.deleteUserById = (req, res) => {
-    res.status(500).json({
-        status: 'error',
-        message: 'method not defined'
-    })
-} 
+exports.deleteUserById = deleteOne(User);

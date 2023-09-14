@@ -1,5 +1,6 @@
 const express = require('express');
 const { getAllUsers, createUser, getUserById, updateUserById, deleteUserById} = require ('./../controllers/userController');
+const { protect, restrictTo } = require('./../controllers/authController')
 
 const router = express.Router();
 
@@ -10,6 +11,6 @@ router.route('/')
 router.route('/:id')
     .get(getUserById)
     .patch(updateUserById)
-    .delete(deleteUserById);
+    .delete(protect, restrictTo('admin'), deleteUserById);
 
 module.exports = router;
