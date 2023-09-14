@@ -1,6 +1,6 @@
 const User = require('./../models/userModel');
 const catchAsync = require("../utils/catchAsync");
-const { deleteOne } = require('./handlerFactory');
+const { deleteOne, updateOne } = require('./handlerFactory');
 
 exports.getAllUsers = catchAsync( async (req, res) => {
 
@@ -29,11 +29,5 @@ exports.getUserById = (req, res) => {
     })
 } 
 
-exports.updateUserById = (req, res) => {
-    res.status(500).json({
-        status: 'error',
-        message: 'method not defined'
-    })
-} 
-
+exports.updateUser = updateOne(User); // REVIEW AUTHORIZATION, PASSWORD CANNOT BE UPDATED HERE! 
 exports.deleteUserById = deleteOne(User);

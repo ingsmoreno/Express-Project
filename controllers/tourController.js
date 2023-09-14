@@ -4,7 +4,7 @@ const Tour = require('./../models/tourModel');
 const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
-const { deleteOne } = require('./handlerFactory');
+const { deleteOne, updateOne, createOne } = require('./handlerFactory');
 
 const tours = readFile('tours-simple.json');
 
@@ -119,18 +119,6 @@ exports.getMonthlyPlan = async ( req, res) => {
 
 }
 
-exports.postTour = catchAsync(async (req, res, next) => {
-
-        const tour = await Tour.create(req.body);
-
-        res.status(201).json({
-            status: 'success',
-            data: {
-            tour
-            }
-        })
-});
-
 exports.getTourById = catchAsync (async (req, res, next) => {
 
         const tour = await Tour.findById(req.params.id).populate('reviews');
@@ -164,23 +152,6 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
         })
 })
 
-exports.patchTour = catchAsync(async (req, res, next) => {
-
-        const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true
-        });
-
-        if(!tour) return next(new AppError(`The id ${req.params.id} tour does not exist`, 404));
-    
-        res.status(200).json({
-            status: 'successfully updated',
-            data: {
-                tour, // when the key and the value are the same, they can only have one name. 
-                updatedAt: req.requestTime
-            }
-        })
-
-})
-
+exports.createTour = createOne(Tour);
+exports.updateTour = updateOne(Tour);
 exports.deleteTour = deleteOne(Tour);
