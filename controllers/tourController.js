@@ -4,7 +4,7 @@ const Tour = require('./../models/tourModel');
 const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
-const { deleteOne, updateOne, createOne } = require('./handlerFactory');
+const { deleteOne, updateOne, createOne, getOne, getAll } = require('./handlerFactory');
 
 const tours = readFile('tours-simple.json');
 
@@ -119,39 +119,8 @@ exports.getMonthlyPlan = async ( req, res) => {
 
 }
 
-exports.getTourById = catchAsync (async (req, res, next) => {
-
-        const tour = await Tour.findById(req.params.id).populate('reviews');
-
-        if(!tour) return next(new AppError(`The id ${req.params.id} tour does not exist`, 404));
-
-        res.status(200).json({
-            status: 'success',
-            data: {
-                tours: tour
-            },
-        })
-
-});
-
-exports.getAllTours = catchAsync(async (req, res, next) => {
-        const feature = new APIFeatures(Tour.find(), req.query)
-            .filter()
-            .sort()
-            .limit()
-            .paginate()
-    
-        const tours = await feature.queryMongo;
-
-        res.status(200).json({
-            status: 'success',
-            data: {
-                tours: tours
-            },
-            results: tours.length,
-        })
-})
-
+exports.getAllTours = getAll(Tour);
+exports.getOneTour = getOne(Tour, {path: 'reviews'});
 exports.createTour = createOne(Tour);
 exports.updateTour = updateOne(Tour);
 exports.deleteTour = deleteOne(Tour);
