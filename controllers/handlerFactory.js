@@ -1,5 +1,43 @@
+const APIFeatures = require('./../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+
+
+exports.getAll = Model => catchAsync(async (req, res, next) => {
+    //Hack
+    let filter = {};
+    if(req.params.tourId) filter = {tour: req.params.tourId}
+
+    const feature = new APIFeatures(Model.find(filter), req.query)
+        .filter()
+        .sort()
+        .limit()
+        .paginate()
+
+    const doc = await feature.queryMongo;
+
+    res.status(200).json({
+        status: 'success',
+        results: doc.length,
+        data: doc,
+    })
+})
+
+exports.getOne = (Model, populateOptions) => catchAsync (async (req, res, next) => {
+
+    let query = Model.findById(req.params.id)
+    if(populateOptions) query = query.populate('reviews');
+
+    const doc = await query
+
+    if(!doc) return next(new AppError(`The id ${req.params.id} document does not exist`, 404));
+
+    res.status(200).json({
+        status: 'success',
+        data: doc
+    });
+
+});
 
 exports.createOne = Model => catchAsync(async (req, res, next) => {
 
