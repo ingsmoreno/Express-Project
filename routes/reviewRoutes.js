@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllReviews, createReview, deleteReviewById, updateReviewById, setTourAndUser } = require('../controllers/reviewController');
+const { getAllReviews, createReview, deleteReviewById, updateReviewById, setTourAndUser, getOneReview } = require('../controllers/reviewController');
 const {protect, restrictTo} = require('./../controllers/authController');
 
 const router = express.Router({ mergeParams: true });
@@ -12,6 +12,7 @@ router.route('/')
         createReview)
 
 router.route('/:id')
+    .get(getOneReview)
     .patch(protect, restrictTo('user'),  updateReviewById)
     .delete(
         protect, 
