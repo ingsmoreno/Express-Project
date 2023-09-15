@@ -2,12 +2,10 @@ const User = require('./../models/userModel');
 const catchAsync = require("../utils/catchAsync");
 const { deleteOne, updateOne, getOne, getAll } = require('./handlerFactory');
 
-exports.createUser = (req, res) => {
-    res.status(500).json({
-        status: 'error',
-        message: 'method not defined'
-    })
-} 
+exports.getMe = (req, res, next) => {
+    req.params.id = req.user.id;
+    next();
+}
 
 exports.getAllUsers = getAll(User);
 exports.getOneUser = getOne(User);
