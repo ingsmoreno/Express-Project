@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllUsers, createUser, getUserById, updateUser, deleteUserById} = require ('./../controllers/userController');
+const { getAllUsers, createUser, getOneUser, updateUser, deleteUserById} = require ('./../controllers/userController');
 const { protect, restrictTo } = require('./../controllers/authController')
 
 const router = express.Router();
@@ -9,7 +9,7 @@ router.route('/')
     .post(createUser);
 
 router.route('/:id')
-    .get(getUserById)
+    .get(getOneUser)
     .patch(updateUser)
     .delete(protect, restrictTo('admin'), deleteUserById);
 
