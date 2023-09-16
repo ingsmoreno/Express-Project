@@ -52,6 +52,7 @@ exports.createOne = Model => catchAsync(async (req, res, next) => {
 });
 
 exports.updateOne = Model => catchAsync(async (req, res, next) => {
+    if(req.body.password) return next(new AppError('The password cannot be updated. Please update password in /updatePassword', 401));
 
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
