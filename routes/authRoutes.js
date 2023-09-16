@@ -3,15 +3,6 @@ const { singup, login, forgotPassword, resetPassword, updatePassword, protect, u
 
 const router = express.Router();
 
-router.route('/updatePassword')
-    .patch(protect, updatePassword);
-
-router.route('/updateMe')
-    .patch(protect, updateMe);
-
-router.route('/deleteMe')
-    .delete(protect, deleteMe);
-
 router.route('/forgotPassword')
     .post(forgotPassword);
 
@@ -24,5 +15,9 @@ router.route('/signup')
 router.route('/login')
     .post(login);
 
+router.use(protect)
+
+router.route('/updatePassword')
+        .patch(updatePassword);
 
 module.exports = router;
