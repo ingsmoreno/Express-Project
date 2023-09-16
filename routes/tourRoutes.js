@@ -5,6 +5,8 @@ const reviewRouter  = require('./../routes/reviewRoutes');
 
 const router = express.Router();
 
+router.use(protect);
+
 // router.param('id', checkId);
 
 //POST tour/tourId/reviews
@@ -25,15 +27,14 @@ router
 
 router
     .route('/')
-    .get(protect, getAllTours)
-    .post(protect, createTour);
+    .get(getAllTours)
+    .post(restrictTo('admin', 'lead-guide'), createTour);
 
 router
     .route('/:id')
     .get(getOneTour)
-    .patch(updateTour)
-    .delete(
-        protect, 
+    .patch(restrictTo('admin', 'lead-guide'), updateTour)
+    .delete( 
         restrictTo('admin', 'lead-guide'), 
         deleteTour
     );
