@@ -14,6 +14,8 @@ exports.getAll = Model => catchAsync(async (req, res, next) => {
         .limit()
         .paginate()
 
+    //index
+    //const doc = await feature.queryMongo.explain()
     const doc = await feature.queryMongo;
 
     res.status(200).json({
