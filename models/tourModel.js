@@ -112,6 +112,8 @@ const toursSchema = new mongoose.Schema({
 }
 )
 
+toursSchema.index({price: 1, duration: -1});
+toursSchema.index({slug: 1});
 
 //This cannot be searched into the properties for the schema
 //this is only for business logic
