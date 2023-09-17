@@ -112,6 +112,7 @@ const toursSchema = new mongoose.Schema({
 }
 )
 
+//REF: https://mongoosejs.com/docs/guide.html#indexes
 toursSchema.index({price: 1, duration: -1});
 toursSchema.index({slug: 1});
 
