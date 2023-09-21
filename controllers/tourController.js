@@ -138,6 +138,40 @@ exports.geospatialWithin = catchAsync ( async (req, res, next) => {
     })
 })
 
+exports.distances = catchAsync ( async (req, res, next) => {
+
+    const { latlng, unit } = req.params;
+    const [lat, lng ] = latlng.split(',');
+
+    const calculation = unit === 'mi' ? 0.000621371 : 0.001;
+
+    if(!lat || !lng) return next(new AppError(`Please provide latitude and longitude in the format lat,lng`, 404));
+
+    const distance = await Tour.aggregate([
+        {
+            $geoNear: {
+                near: {
+                    type: "Point",
+                    coordinates: [lng * 1, lat * 1],
+                },
+                distanceField: "distance",
+                distanceMultiplier: calculation
+            }, 
+        },
+        {
+            $project: {
+                distance: 1,
+                name: 1
+            }
+        }
+]);
+
+    res.status(200).json({
+        status: 'success',
+        data: distance,
+    })
+})
+
 exports.getAllTours = getAll(Tour);
 exports.getOneTour = getOne(Tour, {path: 'reviews'});
 exports.createTour = createOne(Tour);
