@@ -119,7 +119,6 @@ exports.getMonthlyPlan = async ( req, res) => {
 
 }
 
-
 // geo-within/:distance/center/:latlng/unit/:unit
 exports.geospatialWithin = catchAsync ( async (req, res, next) => {
 
