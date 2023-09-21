@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllTours, createTour, getOneTour, updateTour, deleteTour, aliasTopTours, getTourStats, getMonthlyPlan, geospatialWithin } = require('./../controllers/tourController')
+const { getAllTours, createTour, getOneTour, updateTour, deleteTour, aliasTopTours, getTourStats, getMonthlyPlan, geospatialWithin, distances } = require('./../controllers/tourController')
 const { protect, restrictTo } = require('./../controllers/authController')
 const reviewRouter  = require('./../routes/reviewRoutes');
 
@@ -28,6 +28,10 @@ router
 router
     .route('/geo-within/:distance/center/:latlng/unit/:unit')
     .get(geospatialWithin);
+
+router
+    .route('/distances/:latlng/unit/:unit')
+    .get(distances);
 
 router
     .route('/')
