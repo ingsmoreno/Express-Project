@@ -5,6 +5,6 @@ const router = express();
 
 router.get('/', getOVerview );
 
-router.get('/tour', getTours );
+router.get('/tour/:slug', getTours)
 
 module.exports = router;
