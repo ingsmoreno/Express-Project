@@ -93,7 +93,7 @@ reviewSchema.post(/^findOneAnd/, async function(){
 reviewSchema.pre(/^find/, function(next){
     this.populate({
         path: 'user',
-        select: 'name'
+        select: 'name role photo'
     })
     next();
 })
