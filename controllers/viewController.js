@@ -30,3 +30,10 @@ exports.getTours = catchAsync( async (req, res) => {
     })
 })
 
+exports.getLogin = (req, res) => {
+
+    res.status(200).render('login', {
+        title: 'Login'
+    })
+}
+
