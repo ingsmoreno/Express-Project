@@ -1,9 +1,9 @@
 const Tour = require("../models/tourModel")
-const Review = require("../models/reviewModel")
+const Users = require("../models/userModel")
 
 const catchAsync = require("../utils/catchAsync")
 
-exports.getOVerview = catchAsync(async (req, res) => {
+exports.getOVerview = catchAsync(async (req, res, next) => {
 
     console.log(req.body)
     // 1) Get Tour data from collection
@@ -18,15 +18,15 @@ exports.getOVerview = catchAsync(async (req, res) => {
     })
 })
 
-exports.getTours = catchAsync( async (req, res) => {
-    const tour = await Tour.find(req.params).populate({
+exports.getTours = catchAsync( async (req, res, next) => {
+    const tour = await Tour.findOne(req.params).populate({
         path: 'reviews',
         select: 'review rating user'
     })
     //const reviews = await Review.find({tour: tour[0].id});
     res.status(200).render('tour', {
-        title: 'Tour',
-        tour: tour[0]
+        title: `${tour.name} Tour`,
+        tour: tour
     })
 })
 
