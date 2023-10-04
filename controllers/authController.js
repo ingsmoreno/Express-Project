@@ -13,7 +13,7 @@ const signToken = (userId) => {
     })
 }
 
-const filterRoles = (obj, ...allowedFields) => {
+const filterRoles = (obj, ...allowedFields) => { //REVIEW AFTER SESSION
     const newObj = {};
     Object.keys(obj).forEach(el => {
         console.log(el, 'obj')
@@ -82,8 +82,11 @@ exports.login =  catchAsync(async (req, res, next) => {
 
 exports.protect = catchAsync (async (req, res, next) => {
     let token;
+
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1]
+    }else if(req.cookies.jwt) {
+        token = req.cookies.jwt;
     }
 
     if(!token) return next(new AppError('Please provide a Token', 401));
