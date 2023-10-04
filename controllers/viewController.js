@@ -32,7 +32,10 @@ exports.getTours = catchAsync( async (req, res, next) => {
 
 exports.getLogin = (req, res) => {
 
-    res.status(200).render('login', {
+    res.status(200).set(
+        'Content-Security-Policy',
+        "connect-src 'self' localhost:3000/"
+        ).render('login', {
         title: 'Login'
     })
 }
