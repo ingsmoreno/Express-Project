@@ -2,10 +2,6 @@ extends base
 include _reviewCard
 include _overviewBoxDetail
 
-block append head
-    //THIS SECTION IS NOT FINISHED
-  //  script(src='/js/map.js')
-
 block content
     section.section-header
         .header__hero
@@ -55,7 +51,6 @@ block content
         .picture-box
             img.picture-box__img.picture-box__img--3(src="/img/tour-5-3.jpg" alt="The Park Camper Tour 1")
     section.section-map
-        //THIS SECTION IS NOT FINISHED
         #map(data-locations=`${JSON.stringify(tour.locations)}`)
     section.section-reviews
             .reviews 

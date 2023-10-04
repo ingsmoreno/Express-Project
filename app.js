@@ -14,6 +14,8 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp')
+//REF: https://www.npmjs.com/package/cookie-parser npm i cookie-parser
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -49,6 +51,7 @@ if(process.env.NODE_ENV === 'development'){
 
 //Body parser, reading data from body into req.body
 app.use(express.json({limit: '10kb'}));
+app.use(cookieParser())
 
 //ALL THESE CONFIGURATIONS SHOULD BE AFTER CALLING BODY PARSER
 app.use(mongoSanitize());
