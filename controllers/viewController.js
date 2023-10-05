@@ -12,7 +12,10 @@ exports.getOVerview = catchAsync(async (req, res, next) => {
     // 2) Build Template
 
     // 3) Render that template using tour data from 1)
-    res.status(200).render('overview', {
+    res.status(200).set(
+        'Content-Security-Policy',
+        "connect-src 'self' localhost:3000/"
+        ).render('overview', {
         title: "All Tours",
         tours
     })
@@ -24,7 +27,10 @@ exports.getTours = catchAsync( async (req, res, next) => {
         select: 'review rating user'
     })
     //const reviews = await Review.find({tour: tour[0].id});
-    res.status(200).render('tour', {
+    res.status(200).set(
+        'Content-Security-Policy',
+        "connect-src 'self' localhost:3000/"
+        ).render('tour', {
         title: `${tour.name} Tour`,
         tour: tour
     })
