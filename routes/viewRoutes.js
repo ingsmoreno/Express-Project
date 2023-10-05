@@ -1,8 +1,10 @@
 const express = require('express');
 const { getOVerview, getTours, getLogin} = require('./../controllers/viewController');
-const { protect } = require('../controllers/authController');
+const { loggedIn, protect } = require('../controllers/authController');
 
 const router = express();
+
+router.use(loggedIn)
 
 router.get('/', getOVerview );
 
