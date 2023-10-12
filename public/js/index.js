@@ -1,7 +1,8 @@
-import { login } from "./login";
+import { login, logginOut } from "./login";
 
 
 const loginForm = document.querySelector('.form');
+const logOutButton = document.querySelector('.nav__el--logout');
 
 if(loginForm){
     loginForm.addEventListener('submit', e => {
@@ -10,4 +11,6 @@ if(loginForm){
         const password = document.getElementById('password').value
         login(email, password)
     })
-}
+}  
+
+if(logOutButton) logOutButton.addEventListener('click', logginOut);
