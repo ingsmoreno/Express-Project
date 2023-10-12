@@ -1,5 +1,5 @@
 const express = require('express');
-const { singup, login, forgotPassword, resetPassword, updatePassword, protect, updateMe, deleteMe } = require('./../controllers/authController');
+const { singup, login, logOut, forgotPassword, resetPassword, updatePassword, protect, updateMe, deleteMe } = require('./../controllers/authController');
 
 const router = express.Router();
 
@@ -14,6 +14,9 @@ router.route('/signup')
 
 router.route('/login')
     .post(login);
+
+router.route('/logout')
+    .get(logOut);
 
 router.use(protect)
 
