@@ -23,32 +23,58 @@ const handleValidationError = error => {
 const handleJsonWebTokenErrors = () => new AppError('Invalid token. Please log in again', 401);
 const handleTokenExpiredError = () => new AppError('Token expired. Please log in again', 401);
 
-const sendErrorDev = (err, res) => {
-    return res.status(err.statusCode).json({
-        status: err.status,
-        error: err,
-        message: err.message,
-        stack: err.stack
-    })
-} 
+const sendErrorDev = (err, req, res) => {
 
-const sendErrorProd = (err, res) => {
-
-    //operational errors, send message to client
-    if(err.isOperational){
+    if(req.originalUrl.startsWith('/api')){
         return res.status(err.statusCode).json({
             status: err.status,
-            message: err.message
+            error: err,
+            message: err.message,
+            stack: err.stack
         })
+    }
 
-    } else {
-        console.log(err)
-    //programming errors (mongo or third party libraries error)
-        res.status(500).json({
+    return res.status(err.statusCode).render('error', {
+        title: 'Page not found',
+        msg: err.message
+    })
+
+} 
+
+const sendErrorProd = (err, req, res) => {
+
+    if(req.originalUrl.startsWith('/api')){
+        //operational errors, send message to client
+        if(err.isOperational){
+            return res.status(err.statusCode).json({
+                status: err.status,
+                message: err.message
+            })
+    
+        }
+
+        //programming errors (mongo or third party libraries error)
+        return res.status(500).json({
             status: 'error',
             message: 'Something went wrong'
         })
+    } 
+
+    //Operational trusted error, send message to client
+    if(err.isOperational){
+        return res.status(err.statusCode).render('error', {
+            title: 'Page not found',
+            msg: err.message
+        })
+
     }
+
+    //SEND GENERIC MESSAGE
+    return res.status(err.statusCode).render('error', {
+        title: 'Page not found',
+        msg: 'Please try again later.'
+    })
+
 } 
 
 
@@ -56,10 +82,11 @@ module.exports = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
     if(process.env.NODE_ENV === 'development'){
-        sendErrorDev(err, res);
+        sendErrorDev(err, req, res);
         
     }else if(process.env.NODE_ENV === 'production'){
         let error = { ...err };
+        error.message = err.message
         if(error.code === 11000) {
             error = handleDuplicateError(error)
         } else if(error.hasOwnProperty('messageFormat') && error.messageFormat === undefined){
@@ -71,7 +98,7 @@ module.exports = (err, req, res, next) => {
         } else if(error.name === "TokenExpiredError") {
             error = handleTokenExpiredError();
         }
-        sendErrorProd(error, res);
+        sendErrorProd(error, req, res);
     }
 
 }
