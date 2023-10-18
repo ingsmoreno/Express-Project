@@ -1,5 +1,6 @@
 const Tour = require("../models/tourModel")
 const Users = require("../models/userModel")
+const AppError = require("../utils/appError")
 
 const catchAsync = require("../utils/catchAsync")
 
@@ -23,6 +24,9 @@ exports.getTours = catchAsync( async (req, res, next) => {
         path: 'reviews',
         select: 'review rating user'
     })
+
+    if(!tour) return next( new AppError('There is not a tour with that name', 404));
+
     //const reviews = await Review.find({tour: tour[0].id});
     res.status(200).render('tour', {
         title: `${tour.name} Tour`,
