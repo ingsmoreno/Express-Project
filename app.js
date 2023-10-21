@@ -85,6 +85,7 @@ if(process.env.NODE_ENV === 'development'){
 
 //Body parser, reading data from body into req.body
 app.use(express.json({limit: '10kb'}));
+app.use(express.urlencoded({ extended: true, limit: '10kb' })); // REF: https://heynode.com/tutorial/process-user-login-form-expressjs/
 app.use(cookieParser())
 
 //ALL THESE CONFIGURATIONS SHOULD BE AFTER CALLING BODY PARSER
