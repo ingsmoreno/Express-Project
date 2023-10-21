@@ -5,8 +5,6 @@ const AppError = require("../utils/appError")
 const catchAsync = require("../utils/catchAsync")
 
 exports.getOVerview = catchAsync(async (req, res, next) => {
-
-    console.log(req.body)
     // 1) Get Tour data from collection
        const tours =  await Tour.find();
 
@@ -38,6 +36,13 @@ exports.getLogin = (req, res) => {
 
     res.status(200).render('login', {
         title: 'Login'
+    })
+}
+
+exports.getMe = (req, res) => {
+
+    res.status(200).render('account', {
+        title: 'Account'
     })
 }
 

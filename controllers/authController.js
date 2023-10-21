@@ -101,7 +101,7 @@ exports.protect = catchAsync (async (req, res, next) => {
         token = req.cookies.jwt;
     }
 
-    if(!token) return next(new AppError('Please provide a Token', 401));
+    if(!token) return next(new AppError('You are not logged in! Please log in to get access', 401));
 
     // Verification token
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
@@ -114,6 +114,7 @@ exports.protect = catchAsync (async (req, res, next) => {
     if(currentUser.changedPasswordAfter(decoded.iat)) return next(new AppError('User recently changed the password! Please log in again', 401));
 
     req.user = currentUser;
+    res.locals.user = currentUser;
     next();
 })
 
