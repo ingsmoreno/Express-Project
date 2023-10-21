@@ -33,7 +33,7 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     const user = await User.findByIdAndUpdate({_id: req.user._id}, {active: false});
     
     res.status(204).json({
-        status: 'sucess',
+        status: 'success',
         data: null
     })
 
