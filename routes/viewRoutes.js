@@ -1,15 +1,15 @@
 const express = require('express');
-const { getOVerview, getTours, getLogin} = require('./../controllers/viewController');
+const { getOVerview, getTours, getLogin, getMe} = require('./../controllers/viewController');
 const { loggedIn, protect } = require('../controllers/authController');
 
 const router = express();
 
-router.use(loggedIn)
+router.get('/', loggedIn, getOVerview );
 
-router.get('/', getOVerview );
+router.get('/tour/:slug', loggedIn, getTours)
 
-router.get('/tour/:slug', protect, getTours)
+router.get('/login',loggedIn, getLogin)
 
-router.get('/login', getLogin)
+router.get('/me', protect, getMe)
 
 module.exports = router;
