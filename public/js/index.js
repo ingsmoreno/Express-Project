@@ -1,10 +1,11 @@
 import { login, logginOut } from "./login";
-import { updateData } from "./updateSettings"
+import { updateSettings } from "./updateSettings"
 
 
 const loginForm = document.querySelector('.form--login');
 const logOutButton = document.querySelector('.nav__el--logout');
 const updateForm = document.querySelector('.form-user-data');
+const updatePassword = document.querySelector('.form-user-password');
 
 if(loginForm){
     loginForm.addEventListener('submit', e => {
@@ -22,6 +23,19 @@ if(updateForm) {
         e.preventDefault();
         const email = document.getElementById('email').value;
         const name = document.getElementById('name').value;
-        updateData(name, email);
+        updateSettings({name, email}, 'data');
+    })
+}
+
+if(updatePassword) {
+    updatePassword.addEventListener('submit', async e => {
+        e.preventDefault();
+        document.querySelector('.btn--save-password').innerHTML = "Updating...";
+        
+        const oldPassword = document.getElementById('password-current').value;
+        const newPassword = document.getElementById('password').value;
+        const passwordConfirm = document.getElementById('password-confirm').value;
+
+        await updateSettings ({oldPassword, newPassword, passwordConfirm}, 'password');
     })
 }

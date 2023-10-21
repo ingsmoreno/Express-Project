@@ -35,7 +35,7 @@ const createSendToken = ( user, res, statusCode, status, response) => {
 
     if(response){
         res.status(201).json({
-            status: 'sucess',
+            status: 'success',
             token,
             data: response
             
@@ -212,7 +212,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 exports.updatePassword = catchAsync(async (req, res, next) => {
     // 1) Get user  from collectio
     if(!req.body.oldPassword) return next(new AppError('Please provide the oldPassword', 400));
-    const user = await User.findOne({_id: req.user._id }).select('+password');
+    const user = await User.findOne(req.user._id).select('+password');
 
     // 2) Check if post current password is correct
     if(!(await user.correctPassword(req.body.oldPassword, user.password))) return next(new AppError('The old password is not correct', 401));
