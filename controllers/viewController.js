@@ -46,3 +46,20 @@ exports.getMe = (req, res) => {
     })
 }
 
+exports.updatingUserData = catchAsync(async (req, res, next) => {
+
+    const updatedUser = await Users.findByIdAndUpdate(req.user.id, {
+        name: req.body.user,
+        email: req.body.email
+    },{
+        new: true,
+        runValidators: true
+    }
+    
+    );
+
+    res.status(200).render('account', {
+        title: 'Account',
+        user: updatedUser
+    })
+})
