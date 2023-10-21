@@ -13,10 +13,9 @@ const signToken = (userId) => {
     })
 }
 
-const filterRoles = (obj, ...allowedFields) => { //REVIEW AFTER SESSION
+exports.filterRoles = (obj, ...allowedFields) => { 
     const newObj = {};
     Object.keys(obj).forEach(el => {
-        console.log(el, 'obj')
         if(allowedFields.includes(el)) newObj[el] = obj[el];
     })
     return newObj;

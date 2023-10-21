@@ -1,6 +1,7 @@
 const User = require('./../models/userModel');
 const catchAsync = require("../utils/catchAsync");
 const { deleteOne, updateOne, getOne, getAll } = require('./handlerFactory');
+const { filterRoles } = require('./authController');
 
 exports.getMe = (req, res, next) => {
     req.params.id = req.user.id;
@@ -13,7 +14,7 @@ exports.updateMe = catchAsync( async (req, res, next) => {
 
     // 2) Filter put wanted fields that are allowed to be updated
     const filterFields = filterRoles(req.body, 'name', 'email');
-    const updateUser = await User.findByIdAndUpdate({_id: req.user._id}, filterFields, {
+    const updateUser = await User.findByIdAndUpdate(req.user._id, filterFields, {
         new: true,
         runValidators: true
     })
@@ -21,7 +22,7 @@ exports.updateMe = catchAsync( async (req, res, next) => {
     // 3) Update user document
 
     res.status(201).json({
-        status: 'sucess',
+        status: 'success',
         data: {
             updateUser
         }
