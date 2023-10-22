@@ -1,7 +1,40 @@
 const User = require('./../models/userModel');
 const catchAsync = require("../utils/catchAsync");
 const { deleteOne, updateOne, getOne, getAll } = require('./handlerFactory');
-const { filterRoles } = require('./authController');
+const multer = require('multer');
+const AppError = require('../utils/appError');
+
+const multerStorage = multer.diskStorage({
+    destination: function(req, file, cb){
+        cb(null, './public/img/users')
+    },
+    filename: function(req, file, cb) {
+        const format = file.mimetype.split('/')[1];
+        cb(null, `user-${req.user.id}-${Date.now()}.${format}`);
+    }
+})
+
+const multerFilter = (req, file, cb) => {
+    if(file.mimetype.startsWith('image')){
+        cb(null, true);
+    } else {
+        cb(new AppError('Please upload only images'))
+    }
+}
+
+const upload = multer({storage: multerStorage, fileFilter: multerFilter
+})
+
+
+exports.uploadUserPhoto = upload.single('photo');
+
+const filterRoles = (obj, ...allowedFields) => { 
+    const newObj = {};
+    Object.keys(obj).forEach(el => {
+        if(allowedFields.includes(el)) newObj[el] = obj[el];
+    })
+    return newObj;
+}
 
 exports.getMe = (req, res, next) => {
     req.params.id = req.user.id;
