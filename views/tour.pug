@@ -1,5 +1,5 @@
 extends base 
-include _reviewCard
+include _reviewCards
 include _overviewBoxDetail
 
 block content
@@ -55,7 +55,7 @@ block content
     section.section-reviews
             .reviews 
                  each review in tour.reviews
-                    +reviewsCards(review)
+                    +reviewCards(review)
     section.section-cta
         .cta
             .cta__img.cta__img--logo
