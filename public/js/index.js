@@ -21,9 +21,11 @@ if(logOutButton) logOutButton.addEventListener('click', logginOut);
 if(updateForm) {
     updateForm.addEventListener('submit', e => {
         e.preventDefault();
-        const email = document.getElementById('email').value;
-        const name = document.getElementById('name').value;
-        updateSettings({name, email}, 'data');
+        const form = new FormData();
+        form.append('email', document.getElementById('email').value);
+        form.append('name', document.getElementById('name').value);
+        form.append('photo', document.getElementById('photo').files[0])
+        updateSettings(form, 'data');
     })
 }
 
