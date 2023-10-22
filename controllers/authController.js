@@ -13,13 +13,6 @@ const signToken = (userId) => {
     })
 }
 
-exports.filterRoles = (obj, ...allowedFields) => { 
-    const newObj = {};
-    Object.keys(obj).forEach(el => {
-        if(allowedFields.includes(el)) newObj[el] = obj[el];
-    })
-    return newObj;
-}
 
 const createSendToken = ( user, res, statusCode, status, response) => {
     const token = signToken(user._id);
