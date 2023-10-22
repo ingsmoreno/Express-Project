@@ -62,6 +62,9 @@ exports.updateMe = catchAsync( async (req, res, next) => {
 
     // 2) Filter put wanted fields that are allowed to be updated
     const filterFields = filterRoles(req.body, 'name', 'email');
+
+    if(req.file) filterFields.photo = req.file.filename;
+
     const updateUser = await User.findByIdAndUpdate(req.user._id, filterFields, {
         new: true,
         runValidators: true
@@ -71,9 +74,7 @@ exports.updateMe = catchAsync( async (req, res, next) => {
 
     res.status(201).json({
         status: 'success',
-        data: {
-            updateUser
-        }
+        data: updateUser
     })
 })
 
