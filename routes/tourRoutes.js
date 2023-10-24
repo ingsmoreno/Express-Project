@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllTours, createTour, getOneTour, updateTour, deleteTour, aliasTopTours, getTourStats, getMonthlyPlan, geospatialWithin, distances } = require('./../controllers/tourController')
+const { getAllTours, createTour, getOneTour, updateTour, deleteTour, aliasTopTours, getTourStats, getMonthlyPlan, geospatialWithin, distances, uploadTourImages, resizeTourImages } = require('./../controllers/tourController')
 const { protect, restrictTo } = require('./../controllers/authController')
 const reviewRouter  = require('./../routes/reviewRoutes');
 
@@ -41,7 +41,8 @@ router
 router
     .route('/:id')
     .get(getOneTour)
-    .patch(restrictTo('admin', 'lead-guide'), updateTour)
+    .patch(restrictTo('admin', 'lead-guide'), uploadTourImages, resizeTourImages,
+    updateTour)
     .delete( 
         restrictTo('admin', 'lead-guide'), 
         deleteTour
