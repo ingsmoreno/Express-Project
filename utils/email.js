@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const pug = require('pug');
 const {htmlToText} = require('html-to-text');
+const Transport = require("nodemailer-brevo-transport");
 
 //IDEA = new Email(user, url).sendWelcome();
 
@@ -13,7 +14,19 @@ module.exports = class Email{
   }
 
   newTransporter(){
-    if(process.env.NODE_ENV === 'production') return 1; // sendgrid
+    if(process.env.NODE_ENV === 'production') {
+      try{
+        return nodemailer.createTransport(
+          new Transport({
+            apiKey: `${process.env.SENDINBLUE_PASSWORD}` // RETURNING ERROR, NOT WORKING REVIEW AFTER SESSION
+          }))
+
+      }catch(err){
+        console.log(err)
+      }
+      
+      
+    }
 
      //Create transporter 
     return nodemailer.createTransport({
