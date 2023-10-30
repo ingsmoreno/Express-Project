@@ -8,6 +8,7 @@ const userRouter = require('./routes/userRoutes');
 const authRouter = require('./routes/authRoutes');
 const reviewRouter = require('./routes/reviewRoutes')
 const viewRouter = require('./routes/viewRoutes')
+const bookingRoutes = require('./routes/bookingRoutes')
 const AppError = require('./utils/appError');
 const globalHandlerError = require('./controllers/errorController')
 const helmet = require('helmet');
@@ -115,7 +116,8 @@ app.use((req, res, next) => {
 
 //ROUTES
 
-app.use('/', viewRouter)
+app.use('/', viewRouter);
+app.use('/api/v1/bookings', bookingRoutes);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/auth-users', authRouter);
