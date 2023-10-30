@@ -20,7 +20,7 @@ exports.getCheckoutSession =  catchAsync(async (req, res, next) =>{
                 product_data: {
                     name: tour.name,
                     description: tour.summary,
-                    images: ['https://example.com/t-shirt.png'],
+                    images: [`http://localhost:3000/img/tour/${tour.imageCover}`],
                 },
             },
             quantity: 1
