@@ -30,41 +30,45 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')))
 
 //Set security HTTP headers
-app.use(
-    helmet({
-      contentSecurityPolicy: {
-        directives: {
-          defaultSrc: ["'self'", 'data:', 'blob:', 'https:', 'ws:'],
-          baseUri: ["'self'"],
-          fontSrc: ["'self'", 'https:', 'data:'],
-          scriptSrc: [
-            "'self'",
-            'https:',
-            'http:',
-            'blob:',
-          ],
-          objectSrc: ["'none'"],
-          styleSrc: ["'self'", 'https:', "'unsafe-inline'"],
-          workerSrc: [
-            "'self'",
-            'data:',
-            'blob:',
-          ],
-          childSrc: ["'self'", 'blob:'],
-          imgSrc: ["'self'", 'data:', 'blob:'],
-          formAction: ["'self'"],
-          connectSrc: [
-            "'self'",
-            "'unsafe-inline'",
-            'data:',
-            'blob:',
-            'ws://127.0.0.1:*/',
-          ],
-          upgradeInsecureRequests: [],
-        },
-      },
-    })
-  );
+app.use(helmet({ contentSecurityPolicy: false }));
+// app.use(
+//     helmet({
+//       contentSecurityPolicy: {
+//         directives: {
+//           defaultSrc: ["'self'", 'data:', 'blob:', 'https:', 'ws:'],
+//           baseUri: ["'self'"],
+//           fontSrc: ["'self'", 'https:', 'data:'],
+//           scriptSrc: [
+//             "'self'",
+//             'https:',
+//             'http:',
+//             'blob:',
+//             'https://js.stripe.com',
+//           ],
+//           objectSrc: ["'none'"],
+//           styleSrc: ["'self'", 'https:', "'unsafe-inline'"],
+//           workerSrc: [
+//             "'self'",
+//             'data:',
+//             'blob:',
+//             'https://*.stripe.com',
+//           ],
+//           childSrc: ["'self'", 'blob:', 'https://*.stripe.com'],
+//           imgSrc: ["'self'", 'data:', 'blob:'],
+//           formAction: ["'self'"],
+//           connectSrc: [
+//             "'self'",
+//             "'unsafe-inline'",
+//             'data:',
+//             'blob:',
+//             'ws://127.0.0.1:*/',
+//             'https://*.stripe.com',
+//           ],
+//           upgradeInsecureRequests: [],
+//         },
+//       },
+//     })
+//   );
 
 dotenv.config({path: './config.env'});
 
