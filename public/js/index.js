@@ -1,11 +1,12 @@
 import { login, logginOut } from "./login";
-import { updateSettings } from "./updateSettings"
-
+import { bookTour } from "./stripe";
+import { updateSettings } from "./updateSettings";
 
 const loginForm = document.querySelector('.form--login');
 const logOutButton = document.querySelector('.nav__el--logout');
 const updateForm = document.querySelector('.form-user-data');
 const updatePassword = document.querySelector('.form-user-password');
+const bookingBtn = document.getElementById('book-tour');
 
 if(loginForm){
     loginForm.addEventListener('submit', e => {
@@ -40,4 +41,13 @@ if(updatePassword) {
 
         await updateSettings ({oldPassword, newPassword, passwordConfirm}, 'password');
     })
+}
+
+if(bookingBtn){
+    bookingBtn.addEventListener('click', e => {
+        e.target.textContent = 'Processing...';
+
+        const {tourId} = e.target.dataset;
+        bookTour(tourId, e)
+    });
 }
