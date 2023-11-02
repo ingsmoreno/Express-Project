@@ -1,8 +1,11 @@
 # dotenv environment variables file
-config.env
-.env.*
-!.env.example
-
+*.env
 # Dependency directories
 node_modules/
-jspm_packages/
+
+#cache from parcel
+.cache/
+.parcel-cache/
+
+package-lock.json
+.DS_Store

@@ -36,7 +36,7 @@ const importData = async () => {
 
         console.log('Data successfully uploaded');
     } catch(err){ 
-        console.log(err);
+        console.log('ERROR: ', err);
     }
 
     process.exit();
@@ -53,7 +53,7 @@ const deleteData = async () => {
         console.log('Data successfully deleted');
         
     } catch(err){ 
-        console.log(err);
+        console.log('ERROR', err);
     }
 
     process.exit();

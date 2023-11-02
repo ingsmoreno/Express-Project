@@ -17,7 +17,6 @@ export const bookTour = async (tourId, context) => {
 
     } catch(error){
         context.target.textContent = 'Book tour now!';
-        console.log(error);
        displayAlert('error', error);
     }
 }

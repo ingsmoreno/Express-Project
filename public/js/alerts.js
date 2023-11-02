@@ -3,7 +3,6 @@ export const hideAlert = () => {
     if(el) el.parentElement.removeChild(el);
 }
 export const displayAlert = (type, msg) => {
-    console.log(type)
     hideAlert();
     const markup = `<div class="alert alert--${type}">${msg}</div>`;
     document.querySelector('body').insertAdjacentHTML('afterbegin', markup);   

@@ -44,8 +44,8 @@ const server = app.listen(PORT, HOST, () => {
 
 //event listener
 process.on('unhandledRejection', err => {
-    console.log(err.name)
-    console.log(err.message)
+    console.log('ERROR HUNDANDLED REJECTION NAME: ', err.name);
+    console.log('ERROR HUNDANDLED REJECTION MESSAGE: ', err.message);
 
     server.close(() => {
         process.exit(1) // unsuccessfull connection

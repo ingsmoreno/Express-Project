@@ -15,7 +15,9 @@
     "start:prod": "NODE_ENV=production nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "debug": "ndb server.js",
-    "watch:js": "parcel watch --no-hmr ./public/js/index.js --dist-dir ./public/js/bundled"
+    "watch:js": "parcel watch --no-hmr ./public/js/index.js --dist-dir ./public/js/bundled",
+    "build:js": "parcel build ./public/js/index.js --dist-dir ./public/js/bundled"
+
   },
   "author": "",
   "license": "ISC",

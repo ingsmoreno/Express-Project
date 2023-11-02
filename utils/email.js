@@ -22,9 +22,8 @@ module.exports = class Email{
           }))
 
       }catch(err){
-        console.log(err)
+        console.log('ERROR:', err)
       }
-      
       
     }
 

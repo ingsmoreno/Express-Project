@@ -139,7 +139,6 @@ exports.loggedIn = async (req, res, next) => {
 exports.restrictTo = (...roles) => {
     return (req, res, next) => {
         if(!roles.includes(req.user.role)){
-            console.log('does not include')
             return next(new AppError('Permission denied', 403));
         }
 
