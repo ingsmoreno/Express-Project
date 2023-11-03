@@ -2,6 +2,7 @@ const path = require('path')
 const express = require('express');
 const { rateLimit } = require('express-rate-limit');
 const dotenv = require('dotenv')
+const compression = require('compression')
 const morgan = require('morgan');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -108,6 +109,8 @@ app.use(hpp({
     'price']
 }))
 
+
+app.use(compression);
 
 
 //Test middleware
