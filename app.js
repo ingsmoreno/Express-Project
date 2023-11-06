@@ -110,7 +110,7 @@ app.use(hpp({
 }))
 
 
-app.use(compression);
+app.use(compression());
 
 
 //Test middleware
