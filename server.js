@@ -36,7 +36,7 @@ mongoose.connect(DB, {
 // }).catch(err => console.log(err))
 
 const PORT = process.env.PORT || 3000;
-const HOST = 'localhost';
+const HOST = process.env.HOST || 'localhost';
 
 const server = app.listen(PORT, HOST, () => {
     console.log('listening ' + PORT) 
