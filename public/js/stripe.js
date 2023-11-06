@@ -6,7 +6,7 @@ export const bookTour = async (tourId, context) => {
     try{
         const session = await axios({
             method: 'GET',
-            url: `http://localhost:3000/api/v1/bookings/checkout-session/${tourId}`,
+            url: `/api/v1/bookings/checkout-session/${tourId}`,
         })
 
         window.location.replace(session.data.session.url);
