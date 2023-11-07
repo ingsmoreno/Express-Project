@@ -15,16 +15,14 @@ const signToken = (userId) => {
 }
 
 
-const createSendToken = ( user, res, statusCode, status, response) => {
+const createSendToken = ( user, res, statusCode, status, req, response) => {
     const token = signToken(user._id);
-    const cookieOptions = {
-        expires: new Date(Date.now() + process.env.JWT_COOKIES_EXPIRES_IN * 24 * 60 * 60 * 1000),
-        httpOnly: true
-    }
-
-    if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
     
-    res.cookie('jwt', token, cookieOptions );
+    res.cookie('jwt', token, {
+        expires: new Date(Date.now() + process.env.JWT_COOKIES_EXPIRES_IN * 24 * 60 * 60 * 1000),
+        httpOnly: true,
+        secure: req.secure || req.headers('x-forwarded-proto') === 'https' 
+    } );
     user.password = undefined
 
     if(response){
@@ -69,7 +67,7 @@ exports.singup = catchAsync(async (req, res) => {
     const url = `${req.protocol}://${req.get('host')}/login`
     await new Email(newUser, url).sendWelcome();
 
-  createSendToken(newUser, res, 201, 'success',  {user: newUser});
+  createSendToken(newUser, res, 201, 'success', req, {user: newUser});
 
 })
 
@@ -84,7 +82,7 @@ exports.login =  catchAsync(async (req, res, next) => {
 
     if(!user || !correct) return next(new AppError('Incorrect password or email', 401));
 
-    createSendToken(user, res, 201, 'success');
+    createSendToken(user, res, 201, 'success', req);
 
 });
 
@@ -194,7 +192,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     await user.save();
 
     //Log the user in and send JWT
-    createSendToken(user, res, 201, 'success');
+    createSendToken(user, res, 201, 'success', req);
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
@@ -211,5 +209,5 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
     await user.save();
 
     // 4) Log user in, send JWT
-    createSendToken(user, res, 201, 'success', {message: "Password changed successfully"} );
+    createSendToken(user, res, 201, 'success', req, {message: "Password changed successfully"} );
 })
