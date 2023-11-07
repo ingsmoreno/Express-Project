@@ -21,6 +21,8 @@ const cookieParser = require('cookie-parser');
 
 const app = express();
 
+app.enable('trust proxy');
+
 
 //REF: https://expressjs.com/en/guide/using-template-engines.html
 app.set('view engine', 'pug');
