@@ -15,7 +15,8 @@ const globalHandlerError = require('./controllers/errorController')
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
-const hpp = require('hpp')
+const hpp = require('hpp');
+const cors = require('cors');
 //REF: https://www.npmjs.com/package/cookie-parser npm i cookie-parser
 const cookieParser = require('cookie-parser');
 
@@ -30,6 +31,8 @@ app.set('views', path.join(__dirname, 'views'))
 
 //GLOBAL MIDDLEWARES
 //app.use(express.static(`${__dirname}/public`))
+app.use(cors());
+app.options('*', cors());
 app.use(express.static(path.join(__dirname, 'public')))
 
 //Set security HTTP headers
